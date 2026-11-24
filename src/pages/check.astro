@@ -1,0 +1,146 @@
+---
+import Base from '../layouts/Base.astro';
+import { QUESTIONS } from '../lib/analyze.js';
+---
+<Base title="Check my channel">
+  <div id="banner" class="banner" hidden></div>
+
+  <form id="check-form" class="card form" novalidate>
+    <div class="modes" role="radiogroup" aria-label="What do you want to do?">
+      <label><input type="radio" name="mode" value="progress" checked /> <span>How close am I?</span></label>
+      <label><input type="radio" name="mode" value="rejected" /> <span>I got rejected</span></label>
+    </div>
+
+    <h1 class="form-title">Check your channel</h1>
+
+    <label class="field">Your channel link
+      <span class="hint">For example youtube.com/@yourname, or a link to any of your videos.</span>
+      <input type="text" name="url" required autocomplete="off" inputmode="url" placeholder="youtube.com/@yourname" />
+    </label>
+
+    <fieldset class="rejected-only" hidden>
+      <legend>About your rejection</legend>
+      <label class="field">Reason YouTube gave
+        <select name="reason">
+          <option value="reused">Reused content</option>
+          <option value="inauthentic">Inauthentic content (was “repetitious content”)</option>
+          <option value="other">Something else</option>
+          <option value="unknown">I’m not sure</option>
+        </select>
+      </label>
+      <div class="two">
+        <label class="field">Date of the rejection email
+          <input type="date" name="rejectedOn" />
+        </label>
+        <label class="check-inline"><input type="checkbox" name="repeat" /> I was rejected before too</label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Your numbers <span class="opt">optional</span></legend>
+      <p class="hint">YouTube only shows these to you. Find them in YouTube Studio → Earn.</p>
+      <div class="two">
+        <label class="field">Public watch hours (last 12 months)
+          <input type="number" name="watchHours" min="0" step="1" placeholder="e.g. 2350" />
+        </label>
+        <label class="field">Shorts views (last 90 days)
+          <input type="number" name="shortsViews" min="0" step="1" placeholder="e.g. 1500000" />
+        </label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Quick self-check</legend>
+      <p class="hint">Be honest. This only helps you find what to fix.</p>
+      {QUESTIONS.map((q, i) => (
+        <div class="question" role="radiogroup" aria-labelledby={`q-${q.id}`}>
+          <p class="q" id={`q-${q.id}`}><span class="num">{i + 1}</span>{q.q}</p>
+          <div class="opts">
+            {q.options.map(([value, text]) => (
+              <label class="opt-pill"><input type="radio" name={`q_${q.id}`} value={value} /><span>{text}</span></label>
+            ))}
+          </div>
+        </div>
+      ))}
+    </fieldset>
+
+    <p id="form-error" class="error" role="alert" hidden></p>
+    <button type="submit" class="btn big" id="submit-btn">Check my channel</button>
+  </form>
+
+  <section id="results" class="results" hidden aria-live="polite"></section>
+</Base>
+
+<style>
+  .form { max-width: 720px; margin: 0 auto; }
+  .form-title { font-size: 1.6rem; margin: 18px 0 18px; }
+  .modes { display: inline-flex; background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 4px; gap: 4px; flex-wrap: wrap; }
+  .modes label { cursor: pointer; }
+  .modes input { position: absolute; opacity: 0; pointer-events: none; }
+  .modes span { display: block; padding: 8px 14px; border-radius: 9px; font-weight: 600; font-size: .95rem; color: var(--muted); }
+  .modes input:checked + span { background: var(--surface); color: var(--text); box-shadow: var(--shadow); }
+  .modes input:focus-visible + span { outline: 3px solid var(--accent-soft); }
+  fieldset { border: 0; border-top: 1px solid var(--border); margin: 8px 0 0; padding: 18px 0 4px; min-width: 0; }
+  legend { font-weight: 700; font-size: 1.1rem; padding: 0; }
+  .opt { font-weight: 500; font-size: .8rem; color: var(--muted); background: var(--surface-2); padding: 2px 8px; border-radius: 99px; margin-left: 6px; }
+  .hint { color: var(--muted); font-size: .9rem; margin: 2px 0 12px; }
+  .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0 16px; align-items: end; }
+  .check-inline { display: flex; align-items: center; gap: 8px; margin-bottom: 26px; font-weight: 500; }
+  .question { margin: 0 0 18px; }
+  .q { font-weight: 600; margin: 0 0 8px; display: flex; gap: 10px; }
+  .q .num { flex: none; width: 24px; height: 24px; border-radius: 50%; background: var(--surface-2); border: 1px solid var(--border); font-size: .8rem; display: grid; place-items: center; margin-top: 1px; }
+  .opts { display: flex; flex-wrap: wrap; gap: 8px; padding-left: 34px; }
+  .opt-pill { cursor: pointer; }
+  .opt-pill input { position: absolute; opacity: 0; pointer-events: none; }
+  .opt-pill span { display: block; border: 1px solid var(--border); background: var(--surface); padding: 7px 12px; border-radius: 10px; font-size: .92rem; }
+  .opt-pill input:checked + span { border-color: var(--accent); background: var(--accent-soft); font-weight: 600; }
+  .opt-pill input:focus-visible + span { outline: 3px solid var(--accent-soft); }
+  .btn.big { width: 100%; padding: 15px; font-size: 1.05rem; margin-top: 8px; }
+  .error { color: var(--fail); background: var(--fail-soft); padding: 10px 14px; border-radius: 10px; }
+  .banner { max-width: 720px; margin: 0 auto 16px; background: var(--warn-soft); color: var(--text); border: 1px solid var(--border); padding: 12px 16px; border-radius: 12px; font-size: .93rem; }
+  @media (max-width: 520px) { .opts { padding-left: 0; } }
+</style>
+
+<style is:global>
+  .results { max-width: 720px; margin: 0 auto; display: grid; gap: 16px; }
+  .results .ch { display: flex; align-items: center; gap: 12px; }
+  .results .ch img { width: 48px; height: 48px; border-radius: 50%; background: var(--surface-2); }
+  .results .ch h2 { margin: 0; }
+  .badge { display: inline-block; font-size: .75rem; font-weight: 650; padding: 2px 8px; border-radius: 99px; background: var(--warn-soft); color: var(--warn); vertical-align: middle; }
+  .scores { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+  .score .big { font-size: 2.6rem; font-weight: 800; line-height: 1; margin: 6px 0; letter-spacing: -.02em; }
+  .score h3 { font-size: .95rem; color: var(--muted); margin: 0; font-weight: 600; }
+  .bar { height: 10px; background: var(--surface-2); border-radius: 99px; overflow: hidden; margin: 6px 0 2px; }
+  .bar > i { display: block; height: 100%; background: var(--accent); border-radius: 99px; }
+  .bar.warn > i { background: var(--warn); } .bar.fail > i { background: var(--fail); }
+  .meter { font-size: .88rem; margin-top: 10px; }
+  .meter .lbl { display: flex; justify-content: space-between; gap: 8px; }
+  .delta { background: var(--accent-soft); border-radius: 12px; padding: 12px 16px; font-weight: 600; }
+  .delta.down { background: var(--warn-soft); }
+  .countdown { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+  .countdown .n { font-size: 1.8rem; font-weight: 800; }
+  .fix-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .fix { border: 1px solid var(--border); border-left: 5px solid var(--fail); border-radius: 12px; padding: 14px 16px; background: var(--surface); }
+  .fix.warn { border-left-color: var(--warn); }
+  .fix h4 { margin: 0 0 4px; font-size: 1.02rem; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .fix p { margin: 4px 0; }
+  .fix .todo { font-weight: 500; }
+  .chip { font-size: .72rem; font-weight: 700; padding: 2px 8px; border-radius: 99px; text-transform: uppercase; letter-spacing: .03em; }
+  .chip.fail { background: var(--fail-soft); color: var(--fail); } .chip.warn { background: var(--warn-soft); color: var(--warn); }
+  .chip.pass { background: var(--pass-soft); color: var(--pass); } .chip.unknown { background: var(--surface-2); color: var(--muted); }
+  .chip.focus { background: var(--surface-2); color: var(--text); }
+  .vids { margin: 8px 0 0; padding-left: 18px; font-size: .9rem; }
+  .vids a { color: var(--text); }
+  .passed { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 8px; }
+  .passed li { display: flex; gap: 8px; align-items: baseline; font-size: .93rem; }
+  details summary { cursor: pointer; font-weight: 650; }
+  .save-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .save-row input { flex: 1 1 240px; }
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .note { font-size: .85rem; color: var(--muted); }
+</style>
+
+<script>
+  import { initCheckPage } from '../scripts/check.js';
+  initCheckPage();
+</script>

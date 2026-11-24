@@ -1,0 +1,65 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base>
+  <section class="hero">
+    <p class="eyebrow">Free · No sign-up</p>
+    <h1>Is your channel ready to earn?</h1>
+    <p class="lead">Paste your channel link. See how close you are to monetization, what might get you rejected, and exactly what to fix.</p>
+  </section>
+
+  <section class="paths">
+    <a class="path card" href="/check?mode=progress">
+      <span class="icon" aria-hidden="true">📈</span>
+      <h2>Check how close I am</h2>
+      <p class="muted">Your progress toward 1,000 subscribers and 4,000 watch hours or 10M Shorts views, plus an originality check before you apply.</p>
+      <span class="go">Start check →</span>
+    </a>
+    <a class="path card" href="/check?mode=rejected">
+      <span class="icon" aria-hidden="true">🛠️</span>
+      <h2>I got rejected, help me fix it</h2>
+      <p class="muted">Find what likely caused a “reused content” or “inauthentic content” rejection, get a fix plan, and see when you can reapply.</p>
+      <span class="go">Fix my channel →</span>
+    </a>
+  </section>
+
+  <section class="how">
+    <h2>How it works</h2>
+    <ol class="steps">
+      <li><strong>Paste your channel link</strong><span class="muted">We read your public channel info and recent videos.</span></li>
+      <li><strong>Answer a short self-check</strong><span class="muted">Seven quick questions about how you make your videos.</span></li>
+      <li><strong>Get your fix plan</strong><span class="muted">Your scores, the most important fixes first, and your reapply date.</span></li>
+    </ol>
+  </section>
+
+  <section class="checks card">
+    <h2>What we check</h2>
+    <ul>
+      <li>Compilation, re-upload and “TikTok/Reels” style videos</li>
+      <li>Voiceover and whether you appear in your videos</li>
+      <li>Social media links that prove the videos are yours</li>
+      <li>Whether your channel says you make the content</li>
+      <li>Consistent topic, templates, slideshows and branding</li>
+    </ul>
+    <p class="muted small">Based on YouTube’s public Partner Program eligibility and monetization policies.</p>
+  </section>
+</Base>
+
+<style>
+  .hero { text-align: center; padding: 16px 0 28px; }
+  .eyebrow { display: inline-block; background: var(--accent-soft); color: var(--accent); font-weight: 650; font-size: .85rem; padding: 4px 12px; border-radius: 99px; margin: 0 0 14px; }
+  .lead { font-size: 1.12rem; color: var(--muted); max-width: 580px; margin: 0 auto; }
+  .paths { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-bottom: 40px; }
+  .path { display: block; color: var(--text); text-decoration: none; transition: border-color .15s, transform .15s; }
+  .path:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .path .icon { font-size: 1.8rem; display: block; margin-bottom: 8px; }
+  .path p { margin: 0 0 14px; }
+  .path .go { color: var(--accent); font-weight: 650; }
+  .how { margin-bottom: 32px; }
+  .steps { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; counter-reset: s; }
+  .steps li { counter-increment: s; display: flex; flex-direction: column; gap: 2px; padding-left: 44px; position: relative; }
+  .steps li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 32px; height: 32px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; font-weight: 700; }
+  .checks ul { margin: 0 0 12px; padding-left: 20px; }
+  .checks li { margin: 4px 0; }
+  .small { font-size: .88rem; margin: 0; }
+</style>
